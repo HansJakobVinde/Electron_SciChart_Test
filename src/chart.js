@@ -70,6 +70,12 @@ async function initSciChart() {
 
     //Create a data series with some data
     const lineData = new XyDataSeries(wasmContext);
+    const lineData2 = new XyDataSeries(wasmContext);
+    const lineData3 = new XyDataSeries(wasmContext);
+    const lineData4 = new XyDataSeries(wasmContext);
+    const lineData5 = new XyDataSeries(wasmContext);
+    const lineData6 = new XyDataSeries(wasmContext);
+    const lineData7 = new XyDataSeries(wasmContext);
 
     // Create a line series
     const lineSeries = new FastLineRenderableSeries(wasmContext, {
@@ -77,12 +83,48 @@ async function initSciChart() {
         strokeThickness: 2,
         dataSeries: lineData,
     });
+    const lineSeries2 = new FastLineRenderableSeries(wasmContext, {
+        stroke: "red",
+        strokeThickness: 2,
+        dataSeries: lineData2,
+    });
+    const lineSeries3 = new FastLineRenderableSeries(wasmContext, {
+        stroke: "purple",
+        strokeThickness: 2,
+        dataSeries: lineData3,
+    });
+    const lineSeries4 = new FastLineRenderableSeries(wasmContext, {
+        stroke: "black",
+        strokeThickness: 2,
+        dataSeries: lineData4,
+    });
+    const lineSeries5 = new FastLineRenderableSeries(wasmContext, {
+        stroke: "yellow",
+        strokeThickness: 2,
+        dataSeries: lineData5,
+    });
+    const lineSeries6 = new FastLineRenderableSeries(wasmContext, {
+        stroke: "green",
+        strokeThickness: 2,
+        dataSeries: lineData6,
+    });
+    const lineSeries7 = new FastLineRenderableSeries(wasmContext, {
+        stroke: "orange",
+        strokeThickness: 2,
+        dataSeries: lineData7,
+    });
 
     //Assign data series to the line series
     // lineSeries.dataSeries = lineData;
 
     // Create a line series with some initial data
-    sciChartSurface.renderableSeries.add(lineSeries);
+    // sciChartSurface.renderableSeries.add(lineSeries);
+    sciChartSurface.renderableSeries.add(lineSeries2);
+    sciChartSurface.renderableSeries.add(lineSeries3);
+    sciChartSurface.renderableSeries.add(lineSeries4);
+    sciChartSurface.renderableSeries.add(lineSeries5);
+    sciChartSurface.renderableSeries.add(lineSeries6);
+    sciChartSurface.renderableSeries.add(lineSeries7);
 
     window.electronAPI.onPitchData((dataMessage) => {
    
@@ -95,6 +137,55 @@ async function initSciChart() {
             lineData.append(timestamp, pitch);
         } else {
             console.error('Pitch data is undefined');
+        }
+
+        const xAxis = sciChartSurface.xAxes.get(0);
+
+        if (sciChartSurface.zoomState !== EZoomState.UserZooming) {
+            // sciChartSurface.zoomExtents();
+            xAxis.visibleRange = new NumberRange(timestamp - 5000, timestamp);
+        }
+
+    });
+
+    window.electronAPI.onGGdata((dataMessage) => {
+   
+        // console.log("Received new DataMessage:", dataMessage);
+
+        const {timestamp, ax, ay} = dataMessage;
+
+        // Ensure gg data is defined before using it
+        if (ax !== undefined && ay !== undefined) {
+            lineData2.append(timestamp, ax);
+            lineData3.append(timestamp, ay);
+        } else {
+            console.error('ax data or ay data is undefined');
+        }
+
+        const xAxis = sciChartSurface.xAxes.get(0);
+
+        if (sciChartSurface.zoomState !== EZoomState.UserZooming) {
+            // sciChartSurface.zoomExtents();
+            xAxis.visibleRange = new NumberRange(timestamp - 5000, timestamp);
+        }
+
+    });
+
+    window.electronAPI.onMotorTorque((dataMessage) => {
+   
+        // console.log("Received new DataMessage:", dataMessage);
+
+        const {timestamp, fl, fr, rl, rr} = dataMessage;
+
+        // Ensure gg data is defined before using it
+        if ([fl, fr, rl, rr].every(val => !isNaN(val))) {  // Check all values are defined
+            
+            lineData4.append(timestamp, fl);
+            lineData5.append(timestamp, fr);
+            lineData6.append(timestamp, rl);
+            lineData7.append(timestamp, rr);
+        } else {
+            console.error('Torque data is undefined');
         }
 
         const xAxis = sciChartSurface.xAxes.get(0);

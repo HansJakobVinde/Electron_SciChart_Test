@@ -71,6 +71,7 @@ async function initColumnSciChart() {
     // Use CategoryAxis for the X axis to allow text labels
     sciChartSurface.xAxes.add(new CategoryAxis(wasmContext, {
         labels: ["FL", "FR", "RL", "RR"],
+
     }));
     sciChartSurface.yAxes.add(new NumericAxis(wasmContext));
 
@@ -112,7 +113,7 @@ async function initColumnSciChart() {
             // columnData.notifyDataChanged();   // Inform SciChart of the update
 
             // sciChartSurface.invalidateElement(); // Efficiently re-render the chart
-            
+
             const newColumnData = new XyDataSeries(wasmContext, {
                 xValues: [0, 1, 2, 3],
                 yValues: [fl, fr, rl, rr]
