@@ -51,6 +51,32 @@ const createWindow = () => {
 
             //Send the datamessage to the renderer process
             win.webContents.send('motor-torque', { timestamp, fl, fr, rl, rr });
+        } else if ('vcu/116.ImuMeasurements.ax' in dataMessage.data) {
+            const timestamp = dataMessage.timestamp;
+            const ax = dataMessage.data['vcu/116.ImuMeasurements.ax'];
+            const ay = dataMessage.data['vcu/116.ImuMeasurements.ay'];
+            const az = dataMessage.data['vcu/116.ImuMeasurements.az'];
+            const lsb = dataMessage.data['vcu/116.ImuMeasurements.gps_time_lsb'];
+            const msb = dataMessage.data['vcu/116.ImuMeasurements.gps_time_msb'];
+            const picth = dataMessage.data['vcu/116.ImuMeasurements.pitch_rate'];
+            const roll = dataMessage.data['vcu/116.ImuMeasurements.roll_rate'];
+            const yaw = dataMessage.data['vcu/116.ImuMeasurements.yaw_rate'];
+            const pps_lsb = dataMessage.data['vcu/116.ImuMeasurements.pps_time_lsb'];
+
+            win.webContents.send('imu-data', { timestamp, ax, ay, az, lsb, msb, picth, roll, yaw, pps_lsb });
+        } else if ('sensors/454.SgsEvoScannAirPressure.probe_1' in dataMessage.data) {
+            const timestamp = dataMessage.timestamp;
+            const probe_1 = dataMessage.data['sensors/454.SgsEvoScannAirPressure.probe_1'];
+            const probe_2 = dataMessage.data['sensors/454.SgsEvoScannAirPressure.probe_2'];
+            const probe_3 = dataMessage.data['sensors/454.SgsEvoScannAirPressure.probe_3'];
+            const probe_4 = dataMessage.data['sensors/454.SgsEvoScannAirPressure.probe_4'];
+            const probe_5 = dataMessage.data['sensors/454.SgsEvoScannAirPressure.probe_5'];
+            const probe_6 = dataMessage.data['sensors/454.SgsEvoScannAirPressure.probe_6'];
+            const probe_7 = dataMessage.data['sensors/454.SgsEvoScannAirPressure.probe_7'];
+            const probe_8 = dataMessage.data['sensors/454.SgsEvoScannAirPressure.probe_8'];
+            const temp = dataMessage.data['sensors/454.SgsEvoScannAirPressure.temperature'];
+
+            win.webContents.send('air-pressure', { timestamp, probe_1, probe_2, probe_3, probe_4, probe_5, probe_6, probe_7, probe_8, temp });
         }
     });
 
