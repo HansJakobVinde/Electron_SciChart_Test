@@ -327,7 +327,7 @@ async function initSciChart() {
 
     window.electronAPI.onIMUdata((dataMessage) => {
    
-        console.log("Received IMU data");
+        // console.log("Received IMU data");
 
         const {timestamp, ax, ay, az, lsb, msb, picth, roll, yaw, pps_lsb } = dataMessage;
 
@@ -356,6 +356,7 @@ async function initSciChart() {
         }
 
     });
+    
     window.electronAPI.onAirPressure((dataMessage) => {
         const {timestamp, probe_1, probe_2, probe_3, probe_4, probe_5, probe_6, probe_7, probe_8, temp} = dataMessage;
 
